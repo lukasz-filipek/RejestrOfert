@@ -1,0 +1,194 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <img src="https://i.imgur.com/ydDni6C.png" width="250">
+    <div class="container-fluid">
+        
+      <a class="navbar-brand">REJESTR OFERT</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <button type="button" class="btn btn-primary" (click)="onOpenModal(null,'add')">Nowa Oferta</button>
+   </div>
+   <form class="d-flex">
+      <input class="form-control me-sm-2" type="text" (ngModelChange)="searchOferty(key.value)" #key="ngModel" ngModel
+      name="key" placeholder="Szukaj oferty...">
+      
+    </form>
+
+  </nav>
+
+
+  
+
+  
+  <table class="table table-hover" id="main-container">
+  
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nazwa Klienta</th>
+        <th scope="col">Data Otrzymania</th>
+        <th scope="col">Nazwa Zespołu</th>
+        <th scope="col">Waga</th>
+        <th scope="col">Nr. Rysunku</th>
+        <th scope="col">Okres Realizacji</th>
+        <th scope="col">Minimalna Partia</th>
+        <th scope="col">Termin Wyceny</th>
+        <th scope="col">Uwagi</th>
+      </tr>
+    </thead>
+
+  
+    <tbody>
+        <tr *ngFor="let oferta of oferty">
+        <th scope="row">{{oferta?.id}}</th>
+        <td>{{oferta?.nazwaKlienta}}</td>
+        <td>{{oferta?.dataOtrzymaniazapytania}}</td>
+        <td>{{oferta?.nazwaZespolu}}</td>
+        <td>{{oferta?.waga}}</td>
+        <td>{{oferta?.nrRysunku}}</td>
+        <td>{{oferta?.okresRealizacji}}</td>
+        <td>{{oferta?.minimalnaPartia}}</td>
+        <td>{{oferta?.terminWyceny}}</td>
+        <td>{{oferta?.uwagi}}</td>
+        <td><button type="button" class="btn btn-primary">Wycena</button></td>
+        <td><button (click)="onOpenModal(oferta, 'edit')" class="badge bg-warning">Edytuj</button><br/><button (click)="onOpenModal(oferta, 'delete')" class="badge bg-danger">Usuń</button></td>
+        </tr>
+
+    </tbody>
+    
+
+  </table>
+  
+
+  <!-- Add Oferta Modal -->
+<div class="modal fade" id="addOfertaModal" tabindex="-1" role="dialog" aria-labelledby="addOfertaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="addOfertaLabel">Dodaj Ofertę</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form #addForm="ngForm" (ngSubmit)="onAddOferta(addForm)">
+            <div class="form-group">
+                <label class="col-form-label mt-4" for="nazwaKlienta">Nazwa Klienta</label>
+                <input type="text" ngModel name="nazwaKlienta" class="form-control" placeholder="Wpisz nazwę klienta" id="nazwaKlienta"required>
+
+            
+                <label class="col-form-label mt-4" for="dataOtrzymaniazapytania">Data Otrzymania Zapytania</label>
+                <input type="text" ngModel name="dataOtrzymaniazapytania" class="form-control" placeholder="Wpisz datę otrzymania zapytania" id="dataOtrzymaniazapytania" required>
+            
+                <label class="col-form-label mt-4" for="nazwaZespolu">Nazwa Zespołu</label>
+                <input type="text" ngModel name="nazwaZespolu" class="form-control" placeholder="Wpisz nazwę zespołu" id="nazwaZespolu" required>
+            
+                <label class="col-form-label mt-4" for="waga">Waga</label>
+                <input type="text" ngModel name="waga" class="form-control" placeholder="Wpisz wagę" id="waga" required>
+            
+                <label class="col-form-label mt-4" for="nrRysunku">Numer Rysunku</label>
+                <input type="text" ngModel name="nrRysunku" class="form-control" placeholder="Wpisz numer rysunku" id="nrRysunku" required>
+           
+                <label class="col-form-label mt-4" for="okresRealizacji">Okres Realizacji</label>
+                <input type="text" ngModel name="okresRealizacji" class="form-control" placeholder="Wpisz okres realizacji" id="okresRealizacji" required>
+           
+                <label class="col-form-label mt-4" for="minimalnaPartia">Minimalna Partia</label>
+                <input type="text" ngModel name="minimalnaPartia" class="form-control" placeholder="Wpisz minimalną partię" id="minimalnaPartia" required>
+            
+                <label class="col-form-label mt-4" for="terminWyceny">Termin Wyceny</label>
+                <input type="text" ngModel name="terminWyceny" class="form-control" placeholder="Wpisz termin wyceny" id="terminWyceny" required>
+             
+                <label class="col-form-label mt-4" for="uwagi">Uwagi</label>
+                <input type="text" ngModel name="uwagi" class="form-control" placeholder="Wpisz uwagi" id="uwagi" required>
+             </div>
+            <div class="modal-footer">
+               <button type="button" id="add-employee-form" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+               <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Dodaj Ofertę</button>
+            </div>
+            </form>
+         </div>
+      </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="updateOfertaModal" tabindex="-1" role="dialog" aria-labelledby="ofertaEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="updateOfertaModalLabel">Edycja Oferty</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <form #editForm="ngForm">
+                <div class="form-group">
+                   <label for="name">Nazwa Klienta</label>
+                   <input type="text" ngModel="{{editOferta?.nazwaKlienta}}" name="nazwaKlienta" class="form-control" id="nazwaKlienta" placeholder="nazwaKlienta">
+                </div>
+                <input type="hidden" ngModel="{{editOferta?.id}}" name="id" class="form-control" id="id">
+                <input type="hidden" ngModel="{{editOferta?.ofertaCode}}" name="ofertaCode" class="form-control" id="ofertaCode">
+                <div class="form-group">
+                    <label for="name">Data Otrzymania Zapytania</label>
+                    <input type="text" ngModel="{{editOferta?.dataOtrzymaniazapytania}}" name="dataOtrzymaniazapytania" class="form-control" id="dataOtrzymaniazapytania" placeholder="dataOtrzymaniazapytania">
+                 </div>
+                 <div class="form-group">
+                    <label for="name">Nazwa Zespołu</label>
+                    <input type="text" ngModel="{{editOferta?.nazwaZespolu}}" name="nazwaZespolu" class="form-control" id="nazwaZespolu" placeholder="nazwaZespolu">
+                 </div>
+                 <div class="form-group">
+                    <label for="name">Waga</label>
+                    <input type="text" ngModel="{{editOferta?.waga}}" name="waga" class="form-control" id="waga" placeholder="waga">
+                 </div>
+                 <div class="form-group">
+                    <label for="name">Numer Rysunku</label>
+                    <input type="text" ngModel="{{editOferta?.nrRysunku}}" name="nrRysunku" class="form-control" id="nrRysunku" placeholder="nrRysunku">
+                 </div>
+                 <div class="form-group">
+                    <label for="name">Okres Realizacji</label>
+                    <input type="text" ngModel="{{editOferta?.okresRealizacji}}" name="okresRealizacji" class="form-control" id="okresRealizacji" placeholder="okresRealizacji">
+                 </div>
+                 <div class="form-group">
+                    <label for="name">Minimalna Partia</label>
+                    <input type="text" ngModel="{{editOferta?.minimalnaPartia}}" name="minimalnaPartia" class="form-control" id="minimalnaPartia" placeholder="minimalnaPartia">
+                 </div>
+                 <div class="form-group">
+                    <label for="name">Termin Wyceny</label>
+                    <input type="text" ngModel="{{editOferta?.terminWyceny}}" name="terminWyceny" class="form-control" id="terminWyceny" placeholder="terminWyceny">
+                 </div>
+                 <div class="form-group">
+                    <label for="name">Uwagi</label>
+                    <input type="text" ngModel="{{editOferta?.uwagi}}" name="uwagi" class="form-control" id="uwagi" placeholder="uwagi">
+                 </div>
+                <div class="modal-footer">
+                   <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                   <button (click)="onUpdateOferta(editForm.value)" data-dismiss="modal" class="btn btn-primary" >Save changes</button>
+                </div>
+             </form>
+          </div>
+       </div>
+    </div>
+  </div>
+
+
+  <!-- Delete Modal -->
+<div class="modal fade" id="deleteOfertaModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="deleteModelLabel">Skasuj ofertę</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p>Na pewno skasować ofertę o numerze: <b>{{deleteOferta?.id}}</b>?</p>
+             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">NIE</button>
+                <button (click)="onDeleteOferta(deleteOferta?.id)" class="btn btn-danger" data-dismiss="modal">TAK</button>
+             </div>
+          </div>
+       </div>
+    </div>
+  </div>
